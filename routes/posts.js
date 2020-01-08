@@ -43,6 +43,5 @@ router.delete('/:id', (req, res, next) => {
     // res.render('index', { title: 'Surf Shope - Home' });
 });
 
-
 module.exports = router;
 
