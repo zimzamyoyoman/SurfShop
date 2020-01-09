@@ -31,7 +31,7 @@ router.post('/login', (req, res, next) => {
 });
 
 /* GET /profile */
-router.post('/profile', (req, res, next) => {
+router.get('/profile', (req, res, next) => {
   res.send('GET /profile');
   // res.render('index', { title: 'Surf Shope - Home' });
 });
@@ -54,13 +54,13 @@ router.put('/forgot', (req, res, next) => {
   // res.render('index', { title: 'Surf Shope - Home' });
 });
 
-/* GET /reset */
+/* GET /reset/:token */
 router.get('/reset/:token', (req, res, next) => {
   res.send('GET /reset/:token');
   // res.render('index', { title: 'Surf Shope - Home' });
 });
 
-/* PUT /reset */
+/* PUT /reset/:token */
 router.put('/reset/:token', (req, res, next) => {
   res.send('PUT /reset/:token');
   // res.render('index', { title: 'Surf Shope - Home' });
