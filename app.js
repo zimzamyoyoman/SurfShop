@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+// const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 // const passportLocalMongoose = require('passportLocalMongoose');
