@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { errorHandler } = require('../middleware/index');
+const { getPosts } = require('../controllers/posts');
 
 /* GET posts index /posts */
-router.get('/', (req, res, next) => {
-    res.send('INDEX /posts');
-    // res.render('index', { title: 'Surf Shope - Home' });
-});
+router.get('/', errorHandler(getPosts));
 
 /* GET posts new /posts/new */
 router.get('/new', (req, res, next) => {
