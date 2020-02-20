@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>POST</title>
+    <title> <%= title %></title>
     <link rel='stylesheet' href='/stylesheets/posts-show.css' />
   </head>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -9,6 +9,8 @@
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
 <link rel="stylesheet" href="/stylesheets/post-show.css">
   <body>
+    <% include ../partials/navbar %>
+    <% include ../partials/flash-messages %>
     <%- body -%>
 </body>
 <script>
