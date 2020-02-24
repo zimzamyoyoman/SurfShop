@@ -1,34 +1,19 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-
-/* GET reviews index /posts/:id/reviews */
-router.get('/', (req, res, next) => {
-    res.send('INDEX /posts/:id/reviews');
-    // res.render('index', { title: 'Surf Shope - Home' });
-});
+const { asyncErrorHandler } = require('../middleware');
+const {
+    reviewCreate,
+    reviewUpdate,
+    reviewDestroy
+} = require('../controllers/reviews');
 
 /* POST reviews create /posts/:id/reviews */
-router.post('/', (req, res, next) => {
-    res.send('CREATE /posts/:id/reviews');
-    // res.render('index', { title: 'Surf Shope - Home' });
-});
-
-/* GET reviews edit /posts/:id/reviews/:review_id/edit */
-router.get('/:review_id/edit', (req, res, next) => {
-    res.send('EDIT /reviews/:review_id/edit');
-    // res.render('index', { title: 'Surf Shope - Home' });
-});
+router.post('/', asyncErrorHandler(reviewCreate));
 
 /* PUT reviews update /posts/:id/reviews/:review_id */
-router.put('/:review_id', (req, res, next) => {
-    res.send('UPDATE /reviews/:review_id');
-    // res.render('index', { title: 'Surf Shope - Home' });
-});
+router.put('/:review_id', asyncErrorHandler(reviewUpdate));
 
 /* DELETE reviews destroy /posts/:id/reviews/:review_id */
-router.delete('/:id', (req, res, next) => {
-    res.send('DELETE /reviews/:review_id');
-    // res.render('index', { title: 'Surf Shope - Home' });
-});
+router.delete('/:id',asyncErrorHandler(reviewDestroy));
 
 module.exports = router;
