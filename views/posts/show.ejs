@@ -37,8 +37,11 @@
 <!-- Display All Reviews -->
 <h3> Reviews </h3>
 <% post.reviews.forEach(function(review) { %>
+    <hr>
     <div>
-        <%= review.body %>
+        Author: <%= review.author.username %> <br>
+        <%= review.body %> <br>
         Rating: <%= review.rating%>
     </div>
+    <hr>
 <% }); %>
