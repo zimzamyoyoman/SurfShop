@@ -13,8 +13,8 @@ const mongoose = require('mongoose');
 const User = require('./models/user');
 const session = require('express-session');
 const methodOverride = require('method-override');
-
-
+const seedPosts = require('./seeds');
+// seedPosts();
 
 // Require Routes
 const indexRouter = require('./routes/index');
