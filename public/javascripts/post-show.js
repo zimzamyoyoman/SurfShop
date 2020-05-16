@@ -4,7 +4,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiemltemFteW95b21hbiIsImEiOiJjazZ0Ymt6OW0wMGZpM
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v10',
-    center: post.coordinates, //80,22 for India
+    center: post.geometry.coordinates, //80,22 for India
     zoom: 10
 });
 
@@ -14,7 +14,7 @@ el.className = 'marker';
 
 // make a marker for our location and add to the map
 new mapboxgl.Marker(el)
-    .setLngLat(post.coordinates)
+    .setLngLat(post.geometry.coordinates)
     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
         .setHTML('<h3>' + post.title + '</h3><p>' + post.location + '</p>'))
     .addTo(map);

@@ -17,7 +17,11 @@ module.exports = {
         });
         posts.page = Number(posts.page);
         posts.pages = Number(posts.pages);
-        res.render('posts/index', { posts, title: 'Posts Index'});
+        res.render('posts/index', {
+            posts,
+            mapBoxToken: process.env.MAPBOX_TOKEN,
+            title: 'Posts Index'
+        });
     },
     // Posts New
     postNew(req, res, next) {
