@@ -1,25 +1,22 @@
 const Post = require('../models/post');
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-const geocodingClient = mbxGeocoding({ accessToken: process.env.MAPBOX_TOKEN });
-const cloudinary = require('cloudinary');
-cloudinary.config({
-    cloud_name: 'ds8vbkjfh',
-    api_key: '856418851593256',
-    api_secret: process.env.CLOUDINARY_SECRET
-});
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocodingClient = mbxGeocoding({ accessToken: mapBoxToken });
+const { cloudinary } = require('../cloudinary');
 
 module.exports = {
     // Posts Index
     async postIndex(req, res, next) {
         let posts = await Post.paginate({}, {
             page: req.query.page || 1,
-            limit: 10
+            limit: 10,
+            sort: '-_id'
         });
         posts.page = Number(posts.page);
         posts.pages = Number(posts.pages);
         res.render('posts/index', {
             posts,
-            mapBoxToken: process.env.MAPBOX_TOKEN,
+            mapBoxToken,
             title: 'Posts Index'
         });
     },
@@ -31,10 +28,9 @@ module.exports = {
     async postCreate(req, res, next) {
         req.body.post.images = [];
         for (const file of req.files) {
-            let image = await cloudinary.v2.uploader.upload(file.path);
             req.body.post.images.push({
-                url: image.secure_url,
-                public_id: image.public_id
+                url: file.secure_url,
+                public_id: file.public_id
             });
         }
         let response = await geocodingClient
@@ -44,8 +40,10 @@ module.exports = {
             })
             .send();
         // console.log('RESPONSE: ', response.body.features[0].geometry.coordinates);
-        req.body.post.coordinates = response.body.features[0].geometry.coordinates;
-        let post = await Post.create(req.body.post);
+        req.body.post.geometry = response.body.features[0].geometry;
+        let post = new Post(req.body.post);
+		post.properties.description = `<strong><a href="/posts/${post._id}">${post.title}</a></strong><p>${post.location}</p><p>${post.description.substring(0, 20)}...</p>`;
+		await post.save();
         // console.log(post.coordinates);
         req.session.success = 'Post created succesfully!';
         res.redirect(`/posts/${post.id}`);
@@ -61,7 +59,7 @@ module.exports = {
             }
         });
         const floorRating = post.calculateAvgRating();
-        res.render('posts/show', { post, floorRating });
+        res.render('posts/show', { post, mapBoxToken, floorRating });
     },
     // Posts Edit
     async postEdit(req, res, next) {
@@ -93,11 +91,10 @@ module.exports = {
         if (req.files) {
             // upload images
             for (const file of req.files) {
-                let image = await cloudinary.v2.uploader.upload(file.path);
                 // add images to post.images array
                 post.images.push({
-                    url: image.secure_url,
-                    public_id: image.public_id
+                    url: file.secure_url,
+                    public_id: file.public_id
                 });
             }
         }
@@ -110,16 +107,17 @@ module.exports = {
                 limit: 1
             })
                 .send();
-            post.coordinates = response.body.features[0].geometry.coordinates;
+            post.geometry = response.body.features[0].geometry;
             post.location = req.body.post.location;
         }
         // update the post with any new properties
         post.title = req.body.post.title;
         post.description = req.body.post.description;
         post.price = req.body.post.price;
+		post.properties.description = `<strong><a href="/posts/${post._id}">${post.title}</a></strong><p>${post.location}</p><p>${post.description.substring(0, 20)}...</p>`;
         
         // save the updated post into the db
-        post.save();
+        await post.save();
         // redirect to show page
         res.redirect(`/posts/${post.id}`);
     },
