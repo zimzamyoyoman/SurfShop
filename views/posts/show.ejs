@@ -30,7 +30,7 @@
 </div>
 
 <div id='map'></div>
-
+<% if(currentUser && post.author.equals(currentUser._id)) { %>
 <div>
     <a href="/posts/<%=post.id%>/edit">
         <button> Edit Post </button>
@@ -42,6 +42,7 @@
         <input type="submit" value="Delete">
     </form>
 </div>
+<% } %>
 
 <h2> Create a Review </h2>
 <form action='/posts/<%= post.id %>/reviews' method='POST'>
@@ -74,7 +75,7 @@
     <%= review.body %> <br>
     Rating: <%= review.rating%>
 </div>
-<% if (review.author.equals(currentUser._id)) { %>
+<% if (currentUser && review.author.equals(currentUser._id)) { %>
 <div>
     <button class="toggle-edit-form">Edit</button>
 
